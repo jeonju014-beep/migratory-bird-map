@@ -269,6 +269,7 @@ export function getProjectedHabitats(): ProjectedPoint[] {
     return {
       id: h.id,
       name: h.region,
+      habitatName: h.habitatName,
       x,
       y,
       count: h.estimatedCount,

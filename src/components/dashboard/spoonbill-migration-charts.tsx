@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import {
   CONTINENT_COLORS,
   getProjectedHabitats,
   projectRoute,
   SPOONBILL_INFO,
 } from "@/lib/mock/spoonbill";
-import type { SpoonbillContinent } from "@/types/spoonbill";
+import type { ProjectedPoint, SpoonbillContinent } from "@/types/spoonbill";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -31,13 +32,29 @@ import {
 
 const continentLabels: SpoonbillContinent[] = ["아시아", "유럽", "북미"];
 
+function formatPointCount(point: ProjectedPoint) {
+  if (point.role === "드문관찰") {
+    return `관찰 ${point.count}건`;
+  }
+  return `약 ${point.count.toLocaleString()}마리`;
+}
+
 function MigrationMapSvg() {
   const points = getProjectedHabitats();
   const routes = SPOONBILL_INFO.migrationRoutes;
+  const [hovered, setHovered] = useState<ProjectedPoint | null>(null);
 
   return (
-    <div className="relative aspect-[2/1] max-h-48 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 via-violet-50/50 to-rose-50 ring-1 ring-pink-100">
-      <svg viewBox="0 0 100 100" className="h-full w-full" aria-label="서식지 및 이동경로 지도">
+    <div className="relative aspect-[2/1] w-full min-h-[260px] overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 via-violet-50/50 to-rose-50 ring-1 ring-pink-100 sm:min-h-[320px] md:min-h-[380px] lg:min-h-[420px]">
+      <p className="absolute right-3 top-3 z-10 rounded-full bg-white/80 px-2.5 py-1 text-[10px] text-text-tertiary shadow-sm backdrop-blur-sm">
+        점에 마우스를 올려보세요 ✨
+      </p>
+
+      <svg
+        viewBox="0 0 100 100"
+        className="h-full w-full"
+        aria-label="서식지 및 이동경로 지도"
+      >
         <defs>
           <marker
             id="arrow-regular"
@@ -95,36 +112,75 @@ function MigrationMapSvg() {
         {points.map((point) => {
           const radius =
             point.role === "주요서식지"
-              ? Math.max(1.2, Math.min(3.5, Math.sqrt(point.count) / 35))
-              : 1;
+              ? Math.max(1.4, Math.min(4, Math.sqrt(point.count) / 30))
+              : 1.2;
+          const hitRadius = Math.max(radius * 2.2, 3);
+          const isActive = hovered?.id === point.id;
+
           return (
             <g key={point.id}>
               <circle
                 cx={point.x}
                 cy={point.y}
-                r={radius}
-                fill={CONTINENT_COLORS[point.continent]}
-                opacity={point.role === "주요서식지" ? 0.85 : 0.6}
-                stroke="#fff"
-                strokeWidth="0.3"
+                r={hitRadius}
+                fill="transparent"
+                className="cursor-pointer"
+                onMouseEnter={() => setHovered(point)}
+                onMouseLeave={() => setHovered(null)}
+                onFocus={() => setHovered(point)}
+                onBlur={() => setHovered(null)}
               />
-              {point.count >= 200 && (
-                <text
-                  x={point.x}
-                  y={point.y - radius - 0.8}
-                  textAnchor="middle"
-                  fontSize="2"
-                  fill={colors.textSecondary}
-                >
-                  {point.name}
-                </text>
-              )}
+              <circle
+                cx={point.x}
+                cy={point.y}
+                r={isActive ? radius * 1.35 : radius}
+                fill={CONTINENT_COLORS[point.continent]}
+                opacity={point.role === "주요서식지" ? 0.9 : 0.65}
+                stroke={isActive ? "#831843" : "#fff"}
+                strokeWidth={isActive ? 0.6 : 0.35}
+                pointerEvents="none"
+              />
+              <title>
+                {point.name} · {formatPointCount(point)}
+              </title>
             </g>
           );
         })}
       </svg>
 
-      <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+      {hovered && (
+        <div
+          className="pointer-events-none absolute z-20 max-w-[11rem] rounded-xl border border-pink-200 bg-white/95 px-3 py-2 shadow-lg shadow-pink-100/60 backdrop-blur-sm sm:max-w-xs"
+          style={{
+            left: `${hovered.x}%`,
+            top: `${hovered.y}%`,
+            transform: "translate(-50%, calc(-100% - 10px))",
+          }}
+          role="tooltip"
+        >
+          <p className="flex items-center gap-1.5 text-sm font-bold text-text">
+            <span
+              className="inline-block h-2 w-2 shrink-0 rounded-full"
+              style={{ backgroundColor: CONTINENT_COLORS[hovered.continent] }}
+            />
+            {hovered.name}
+          </p>
+          {hovered.habitatName && (
+            <p className="mt-0.5 line-clamp-2 text-[11px] text-text-secondary">
+              {hovered.habitatName}
+            </p>
+          )}
+          <p className="mt-1 font-display text-base font-bold text-brand">
+            {formatPointCount(hovered)}
+          </p>
+          <p className="mt-0.5 text-[10px] text-text-tertiary">
+            {hovered.continent} · {hovered.season}
+            {hovered.role === "드문관찰" ? " · 드문 관찰" : ""}
+          </p>
+        </div>
+      )}
+
+      <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
         {continentLabels.map((c) => (
           <span
             key={c}

@@ -42,6 +42,7 @@ export interface SpoonbillInfo {
 export interface ProjectedPoint {
   id: string;
   name: string;
+  habitatName?: string;
   x: number;
   y: number;
   count: number;
