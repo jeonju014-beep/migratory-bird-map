@@ -1,3 +1,9 @@
+import {
+  SPOONBILL_PRIMARY_IMAGE,
+  SPOONBILL_VERIFIED_IMAGES,
+} from "@/lib/mock/spoonbill-images";
+import { normalizeExternalUrl } from "@/lib/utils/map-url";
+
 export interface SpoonbillPhoto {
   id: string;
   url: string;
@@ -6,41 +12,41 @@ export interface SpoonbillPhoto {
   credit: string;
 }
 
-/** 댕기머리물떼새 대표 사진 모음 (1분마다 순환) */
+/** 댕기머리물떼새(Northern Lapwing · Vanellus vanellus) 대표 사진 */
 export const SPOONBILL_PHOTOS: SpoonbillPhoto[] = [
   {
-    id: "ulsan-official",
-    url: "http://usmigrant.ulsanbdc.or.kr/images/usmgt094_1.jpg",
-    title: "울산시 · 공식 기록",
-    caption: "검은 얼굴과 주걱 모양 부리가 특징이에요",
-    credit: "ⓒ 울산시청 / 국립생물자원관",
-  },
-  {
-    id: "taiwan-wetland",
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Black-faced_Spoonbill_1.jpg/640px-Black-faced_Spoonbill_1.jpg",
-    title: "대만 습지",
-    caption: "세계 최대 월동지에서 먹이를 찾는 모습",
+    id: "portrait",
+    url: SPOONBILL_VERIFIED_IMAGES.portrait,
+    title: "댕기머리물떼새",
+    caption: "검은 목·가슴과 초록빛 머리, 번식기 긴 깃(댕기)가 특징이에요",
     credit: "Wikimedia Commons · CC",
   },
   {
-    id: "hong-kong",
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Platalea_minor_-_Hong_Kong.jpg/640px-Platalea_minor_-_Hong_Kong.jpg",
-    title: "홍콩 Deep Bay",
-    caption: "겨울철 대표 월동지에서의 모습",
+    id: "breeding",
+    url: SPOONBILL_VERIFIED_IMAGES.breeding,
+    title: "번식기 · 유럽",
+    caption: "봄 들판·습지에서 번식하며 ‘삐-익’ 소리를 내요",
     credit: "Wikimedia Commons · CC",
   },
   {
-    id: "breeding-plumage",
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Black-faced_spoonbill_%28Platalea_minor%29.jpg/640px-Black-faced_spoonbill_%28Platalea_minor%29.jpg",
-    title: "번식깃",
-    caption: "노란 장식깃이 돋보이는 번식기",
+    id: "foraging",
+    url: SPOONBILL_VERIFIED_IMAGES.foraging,
+    title: "갯벌·논",
+    caption: "논·갯벌·하구에서 곤충·벌레를 찾아먹어요",
     credit: "Wikimedia Commons · CC",
   },
   {
-    id: "flying",
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Platalea_minor_-_Taiwan.jpg/640px-Platalea_minor_-_Taiwan.jpg",
-    title: "비행",
-    caption: "넓은 날개로 습지 위를 날아요",
+    id: "wetland",
+    url: SPOONBILL_VERIFIED_IMAGES.wetland,
+    title: "물가",
+    caption: "물가와 진흙탕 주변을 가볍게 걸어다녀요",
+    credit: "Wikimedia Commons · CC",
+  },
+  {
+    id: "classic",
+    url: SPOONBILL_VERIFIED_IMAGES.classic,
+    title: "Northern Lapwing",
+    caption: "흰 배와 갈색 등, 넓은 날개의 대표적인 물떼새예요",
     credit: "Wikimedia Commons · CC",
   },
 ];
@@ -50,17 +56,23 @@ export const PHOTO_ROTATE_MS = 60_000;
 export function buildPhotoList(apiPictureUrl?: string): SpoonbillPhoto[] {
   if (!apiPictureUrl) return SPOONBILL_PHOTOS;
 
-  const exists = SPOONBILL_PHOTOS.some((p) => p.url === apiPictureUrl);
-  if (exists) return SPOONBILL_PHOTOS;
+  const normalizedApiUrl = normalizeExternalUrl(apiPictureUrl);
+  const exists = SPOONBILL_PHOTOS.some((photo) => photo.url === normalizedApiUrl);
+
+  if (exists || normalizedApiUrl.includes("usmigrant.ulsanbdc.or.kr")) {
+    return SPOONBILL_PHOTOS;
+  }
 
   return [
     {
-      id: "ulsan-api-live",
-      url: apiPictureUrl,
-      title: "울산 API 실시간",
-      caption: "태화강 일대에서 기록된 댕기머리물떼새",
-      credit: "울산철새 API",
+      id: "api-live",
+      url: normalizedApiUrl,
+      title: "관측 기록",
+      caption: "API에서 제공한 사진이에요",
+      credit: "철새 API",
     },
     ...SPOONBILL_PHOTOS,
   ];
 }
+
+export { SPOONBILL_PRIMARY_IMAGE };

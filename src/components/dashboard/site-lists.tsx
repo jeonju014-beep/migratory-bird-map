@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiteListItem } from "@/components/dashboard/site-hover-card";
 import { stripHtml, truncate } from "@/lib/utils/format";
+import { resolveBirdSiteCoordinates } from "@/lib/utils/coordinates";
 import { enrichBirdSite, enrichWetlandSpot } from "@/lib/utils/site-links";
 import type { BirdSite, WetlandSpot } from "@/types/dashboard";
 
@@ -9,12 +10,13 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
   const enriched = sites.map(enrichBirdSite);
 
   return (
-    <Card className="h-full">
+    <Card className="h-full overflow-visible">
       <CardHeader className="px-4 pb-2 pt-4 sm:p-5 sm:pb-2">
-        <CardTitle>철새 도래지 목록</CardTitle>
-        <p className="text-xs text-text-tertiary">
-          <span className="md:hidden">「자세히 보기」를 눌러 정보를 확인하세요</span>
-          <span className="hidden md:inline">마우스를 올리면 요약과 링크를 확인할 수 있어요</span>
+        <CardTitle>철새 도래지 목록</CardTitle>        <p className="text-xs text-text-tertiary">
+          <span className="md:hidden">「자세히 보기」를 눌러 지도·정보를 확인하세요</span>
+          <span className="hidden md:inline">
+            마우스를 올리면 위치 지도·요약·링크를 확인할 수 있어요
+          </span>
         </p>
       </CardHeader>
       <CardContent className="overflow-visible px-3 pb-4 sm:p-5 sm:pt-3">
@@ -22,7 +24,10 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
           <EmptyState message="선택한 지역에 등록된 철새 도래지가 없습니다" />
         ) : (
           <ul className="space-y-2">
-            {enriched.map((site) => (
+            {enriched.map((site) => {
+              const coords = resolveBirdSiteCoordinates(site);
+
+              return (
               <SiteListItem
                 key={site.id}
                 detailPanel={{
@@ -35,6 +40,12 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
                     site.source === "tour"
                       ? "대한민국 구석구석"
                       : "상세·공식 정보",
+                  location: {
+                    title: site.title,
+                    address: site.address,
+                    latitude: coords?.latitude,
+                    longitude: coords?.longitude,
+                  },
                 }}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -54,7 +65,8 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
                   </p>
                 )}
               </SiteListItem>
-            ))}
+              );
+            })}
           </ul>
         )}
       </CardContent>

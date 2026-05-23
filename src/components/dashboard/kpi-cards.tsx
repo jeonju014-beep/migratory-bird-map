@@ -86,15 +86,15 @@ export function WeatherMiniCard({
   description: string;
 }) {
   return (
-    <Card className="transition hover:border-sky-200 hover:shadow-md hover:shadow-sky-100/40">
-      <CardContent className="flex items-center gap-3">
-        <div className="rounded-2xl bg-sky-100/80 p-2.5">
-          <Thermometer className="h-4 w-4 text-sky-500" />
+    <Card className="transition hover:border-sky-200 hover:shadow-sm hover:shadow-sky-100/40">
+      <CardContent className="flex items-center gap-2 px-3 py-2 sm:px-3 sm:py-2.5">
+        <div className="rounded-xl bg-sky-100/80 p-1.5">
+          <Thermometer className="h-3 w-3 text-sky-500" />
         </div>
-        <div>
-          <p className="font-medium text-text">{city}</p>
-          <p className="text-xs text-text-tertiary">
-            {tempMin}° ~ {tempMax}° · {description}
+        <div className="min-w-0">
+          <p className="truncate text-xs font-medium text-text">{city}</p>
+          <p className="truncate text-[10px] leading-snug text-text-tertiary">
+            {tempMin}°~{tempMax}° · {description}
           </p>
         </div>
       </CardContent>

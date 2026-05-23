@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   Bar,
   BarChart,
@@ -14,7 +13,8 @@ import {
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { BirdNameHover } from "@/components/ui/bird-name-hover";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";import { SectionTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, SectionTitle } from "@/components/ui/card";
+import { SafeImage } from "@/components/ui/safe-image";
 import {
   chartGridStroke,
   chartTooltipStyle,
@@ -22,8 +22,8 @@ import {
 } from "@/lib/design/tokens";
 import type { UlsanBirdData } from "@/types/regional";
 
-export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {  return (
-    <section>
+export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {
+  return (    <section>
       <SectionTitle>울산 태화강 철새 출현</SectionTitle>
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
@@ -108,17 +108,12 @@ export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {  return 
         <Card className="mt-4 overflow-hidden">
           <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start">
             {data.spoonbillMaster.picture1 && (
-              <div className="relative h-36 w-full shrink-0 overflow-hidden rounded-xl sm:w-48">
-                <Image
-                  src={data.spoonbillMaster.picture1}
-                  alt={data.spoonbillMaster.species_name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-            )}
-            <div>
+              <SafeImage
+                src={data.spoonbillMaster.picture1}
+                alt={data.spoonbillMaster.species_name}
+                wrapperClassName="h-36 w-full shrink-0 rounded-xl sm:w-48"
+              />
+            )}            <div>
               <Badge variant="accent" className="mb-2">
                 울산 관측 종 마스터
               </Badge>

@@ -72,7 +72,7 @@ export function SpoonbillSpotlight({
     }));
 
   return (
-    <Card className="overflow-hidden border-rose-200/80 bg-gradient-to-br from-white via-rose-50/80 to-violet-50/60 shadow-lg shadow-rose-100/50">
+    <Card className="overflow-visible border-rose-200/80 bg-gradient-to-br from-white via-rose-50/80 to-violet-50/60 shadow-lg shadow-rose-100/50">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-300 via-rose-300 to-violet-300" />
 
       <CardHeader className="relative space-y-3 px-4 py-4 sm:px-6 sm:py-5">
@@ -110,7 +110,7 @@ export function SpoonbillSpotlight({
         </p>
       </CardHeader>
 
-      <CardContent className="space-y-5 px-4 pb-5 pt-0 sm:space-y-6 sm:px-6 sm:pb-6">
+      <CardContent className="space-y-5 overflow-visible px-4 pb-5 pt-0 sm:space-y-6 sm:px-6 sm:pb-6">
         <SpoonbillPhotoRotator apiPictureUrl={ulsanMaster?.picture1} />
         <SpoonbillMigrationCharts />
 

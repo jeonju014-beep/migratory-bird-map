@@ -1,15 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import { Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { SafeImage } from "@/components/ui/safe-image";
 import {
   buildPhotoList,
   PHOTO_ROTATE_MS,
   type SpoonbillPhoto,
 } from "@/lib/mock/spoonbill-photos";
-
 export function SpoonbillPhotoRotator({
   apiPictureUrl,
 }: {
@@ -45,19 +44,14 @@ export function SpoonbillPhotoRotator({
   return (
     <div className="overflow-hidden rounded-2xl border border-rose-200/80 bg-white/70 shadow-md shadow-pink-100/40 ring-1 ring-pink-100">
       <div className="relative aspect-[16/9] max-h-56 w-full bg-gradient-to-br from-pink-50 to-violet-50 sm:max-h-64">
-        <Image
+        <SafeImage
           key={current.id}
           src={current.url}
           alt={`댕기머리물떼새 - ${current.title}`}
-          fill
-          className={`object-cover transition-opacity duration-500 ${
+          wrapperClassName={`absolute inset-0 transition-opacity duration-500 ${
             fade ? "opacity-100" : "opacity-0"
           }`}
-          sizes="(max-width: 768px) 100vw, 900px"
-          unoptimized
-          priority={index === 0}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/50 via-transparent to-transparent" />
+        />        <div className="absolute inset-0 bg-gradient-to-t from-rose-900/50 via-transparent to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
           <div className="mb-1 flex flex-wrap items-center gap-2">
             <Badge variant="love" className="bg-white/20 text-white backdrop-blur-sm">

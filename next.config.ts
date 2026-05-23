@@ -17,7 +17,19 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "usmigrant.ulsanbdc.or.kr",
+      },
+      {
+        protocol: "https",
         hostname: "upload.wikimedia.org",
+      },
+      {
+        protocol: "https",
+        hostname: "commons.wikimedia.org",
+      },
+      {
+        protocol: "https",
+        hostname: "staticmap.openstreetmap.de",
       },
     ],
   },

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { cn } from "@/lib/utils/format";
-import { useIsMobile } from "@/hooks/use-media-query";
-import {
+import { SafeImage } from "@/components/ui/safe-image";
+import { useIsMobile } from "@/hooks/use-media-query";import {
   getBirdSpeciesInfo,
   parseBirdNameSegments,
   type BirdSpeciesInfo,
@@ -34,18 +33,12 @@ export function BirdSpeciesCard({
       role="tooltip"
     >
       {info?.imageUrl ? (
-        <div className="relative h-28 w-full bg-gradient-to-br from-pink-50 to-violet-50">
-          <Image
-            src={info.imageUrl}
-            alt={displayName}
-            fill
-            className="object-cover"
-            sizes="224px"
-            unoptimized
-          />
-        </div>
-      ) : (
-        <div className="flex h-20 items-center justify-center bg-gradient-to-br from-pink-50 to-violet-50 text-3xl">
+        <SafeImage
+          src={info.imageUrl}
+          alt={displayName}
+          wrapperClassName="h-28 w-full bg-gradient-to-br from-pink-50 to-violet-50"
+        />
+      ) : (        <div className="flex h-20 items-center justify-center bg-gradient-to-br from-pink-50 to-violet-50 text-3xl">
           🐦
         </div>
       )}

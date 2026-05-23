@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import {
+import { useId, useState } from "react";import {
   CONTINENT_COLORS,
   getProjectedHabitats,
   projectRoute,
@@ -64,7 +63,61 @@ function MapPointInfo({ point }: { point: ProjectedPoint }) {
   );
 }
 
+function MapLandmasses() {
+  return (
+    <g aria-hidden>
+      {/* 바다 그리드 */}
+      {[20, 40, 60, 80].map((value) => (
+        <g key={value} opacity={0.35}>
+          <line
+            x1={value}
+            y1={0}
+            x2={value}
+            y2={100}
+            stroke="#93c5fd"
+            strokeWidth={0.12}
+            strokeDasharray="0.8 0.8"
+          />
+          <line
+            x1={0}
+            y1={value}
+            x2={100}
+            y2={value}
+            stroke="#93c5fd"
+            strokeWidth={0.12}
+            strokeDasharray="0.8 0.8"
+          />
+        </g>
+      ))}
+
+      {/* 단순화된 육지 윤곽 (아시아·유럽·북미 서부) */}
+      <path
+        d="M 48 8 C 56 6, 62 10, 66 16 C 70 22, 74 28, 78 34 C 84 38, 92 36, 97 40 C 99 46, 96 54, 88 58 C 80 62, 72 58, 68 52 C 64 46, 58 42, 52 38 C 48 32, 44 24, 48 8 Z"
+        fill="#dcfce7"
+        stroke="#86efac"
+        strokeWidth={0.25}
+        opacity={0.95}
+      />
+      <path
+        d="M 40 10 C 46 8, 52 12, 54 18 C 56 24, 52 30, 46 32 C 42 28, 38 22, 40 10 Z"
+        fill="#e0e7ff"
+        stroke="#a5b4fc"
+        strokeWidth={0.25}
+        opacity={0.95}
+      />
+      <path
+        d="M 6 18 C 14 14, 24 16, 28 24 C 30 32, 26 42, 18 48 C 10 46, 4 36, 6 18 Z"
+        fill="#e0f2fe"
+        stroke="#7dd3fc"
+        strokeWidth={0.25}
+        opacity={0.95}
+      />
+    </g>
+  );
+}
+
 function MigrationMapSvg() {
+  const mapId = useId().replace(/:/g, "");
   const points = getProjectedHabitats();
   const routes = SPOONBILL_INFO.migrationRoutes;
   const [hovered, setHovered] = useState<ProjectedPoint | null>(null);
@@ -78,47 +131,52 @@ function MigrationMapSvg() {
 
   return (
     <div>
-      <div className="relative aspect-[4/3] w-full min-h-[220px] overflow-hidden rounded-2xl bg-gradient-to-br from-sky-50 via-violet-50/50 to-rose-50 ring-1 ring-pink-100 sm:aspect-[2/1] sm:min-h-[280px] md:min-h-[340px] lg:min-h-[380px]">
-        <p className="absolute right-2 top-2 z-10 max-w-[9rem] rounded-full bg-white/85 px-2 py-1 text-[10px] leading-snug text-text-tertiary shadow-sm backdrop-blur-sm sm:right-3 sm:top-3 sm:max-w-none">
+      <div className="relative h-[280px] w-full overflow-visible rounded-2xl bg-gradient-to-br from-sky-100 via-sky-50 to-violet-50 ring-2 ring-sky-200/80 sm:h-[340px] md:h-[400px]">
+        <p className="absolute right-2 top-2 z-10 max-w-[9rem] rounded-full bg-white/90 px-2 py-1 text-[10px] leading-snug text-text-tertiary shadow-sm backdrop-blur-sm sm:right-3 sm:top-3 sm:max-w-none">
           <span className="sm:hidden">점을 탭해 보세요 ✨</span>
-          <span className="hidden sm:inline">점에 마우스를 올려보세요 ✨</span>
+          <span className="hidden sm:inline">점에 마우스를 올리면 정보가 나와요 ✨</span>
         </p>
 
         <svg
           viewBox="0 0 100 100"
-          className="h-full w-full touch-manipulation"
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 h-full w-full touch-manipulation"
           aria-label="서식지 및 이동경로 지도"
         >
+          <rect x={0} y={0} width={100} height={100} fill="#eff6ff" rx={1} />
+
+          <MapLandmasses />
+
           <defs>
             <marker
-              id="arrow-regular"
-              markerWidth="4"
-              markerHeight="4"
-              refX="3"
-              refY="2"
+              id={`${mapId}-arrow-regular`}
+              markerWidth={5}
+              markerHeight={5}
+              refX={4}
+              refY={2.5}
               orient="auto"
             >
-              <path d="M0,0 L4,2 L0,4 Z" fill="#f472b6" opacity="0.8" />
+              <path d="M0,0 L5,2.5 L0,5 Z" fill="#e11d48" />
             </marker>
             <marker
-              id="arrow-rare"
-              markerWidth="4"
-              markerHeight="4"
-              refX="3"
-              refY="2"
+              id={`${mapId}-arrow-rare`}
+              markerWidth={5}
+              markerHeight={5}
+              refX={4}
+              refY={2.5}
               orient="auto"
             >
-              <path d="M0,0 L4,2 L0,4 Z" fill="#94a3b8" opacity="0.7" />
+              <path d="M0,0 L5,2.5 L0,5 Z" fill="#64748b" />
             </marker>
           </defs>
 
-          <text x="62" y="42" fontSize="3" fill={colors.textTertiary}>
+          <text x={72} y={44} fontSize={3.2} fill="#0369a1" fontWeight={600}>
             아시아
           </text>
-          <text x="48" y="28" fontSize="2.5" fill={colors.textTertiary}>
+          <text x={44} y={22} fontSize={2.8} fill="#4338ca" fontWeight={600}>
             유럽
           </text>
-          <text x="12" y="38" fontSize="2.5" fill={colors.textTertiary}>
+          <text x={10} y={36} fontSize={2.8} fill="#0284c7" fontWeight={600}>
             북미
           </text>
 
@@ -126,18 +184,18 @@ function MigrationMapSvg() {
             const { x1, y1, x2, y2 } = projectRoute(route);
             const isRegular = route.routeType === "정기이동";
             const mx = (x1 + x2) / 2;
-            const my = Math.min(y1, y2) - 8;
+            const my = Math.min(y1, y2) - 10;
 
             return (
               <g key={route.id}>
                 <path
                   d={`M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`}
                   fill="none"
-                  stroke={isRegular ? "#f472b6" : "#cbd5e1"}
-                  strokeWidth={isRegular ? 0.35 : 0.25}
-                  strokeDasharray={isRegular ? "none" : "1 0.8"}
-                  markerEnd={`url(#arrow-${isRegular ? "regular" : "rare"})`}
-                  opacity={isRegular ? 0.75 : 0.55}
+                  stroke={isRegular ? "#f43f5e" : "#94a3b8"}
+                  strokeWidth={isRegular ? 0.55 : 0.35}
+                  strokeDasharray={isRegular ? undefined : "1.2 0.8"}
+                  markerEnd={`url(#${mapId}-arrow-${isRegular ? "regular" : "rare"})`}
+                  opacity={isRegular ? 0.9 : 0.65}
                 />
               </g>
             );
@@ -146,9 +204,9 @@ function MigrationMapSvg() {
           {points.map((point) => {
             const radius =
               point.role === "주요서식지"
-                ? Math.max(1.4, Math.min(4, Math.sqrt(point.count) / 30))
-                : 1.2;
-            const hitRadius = Math.max(radius * 2.5, 3.5);
+                ? Math.max(2.2, Math.min(5.5, Math.sqrt(point.count) / 22))
+                : 1.8;
+            const hitRadius = Math.max(radius * 2.2, 4.5);
             const isActive = active?.id === point.id;
 
             return (
@@ -163,14 +221,26 @@ function MigrationMapSvg() {
                   onMouseLeave={() => setHovered(null)}
                   onClick={() => handlePointSelect(point)}
                 />
+                {isActive && (
+                  <circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={radius + 1.2}
+                    fill="none"
+                    stroke="#831843"
+                    strokeWidth={0.35}
+                    opacity={0.5}
+                    pointerEvents="none"
+                  />
+                )}
                 <circle
                   cx={point.x}
                   cy={point.y}
-                  r={isActive ? radius * 1.35 : radius}
+                  r={isActive ? radius * 1.2 : radius}
                   fill={CONTINENT_COLORS[point.continent]}
-                  opacity={point.role === "주요서식지" ? 0.9 : 0.65}
-                  stroke={isActive ? "#831843" : "#fff"}
-                  strokeWidth={isActive ? 0.6 : 0.35}
+                  opacity={point.role === "주요서식지" ? 0.95 : 0.75}
+                  stroke="#fff"
+                  strokeWidth={0.45}
                   pointerEvents="none"
                 />
                 <title>
@@ -187,7 +257,7 @@ function MigrationMapSvg() {
             style={{
               left: `${active.x}%`,
               top: `${active.y}%`,
-              transform: "translate(-50%, calc(-100% - 10px))",
+              transform: "translate(-50%, calc(-100% - 12px))",
             }}
             role="tooltip"
           >
@@ -195,18 +265,21 @@ function MigrationMapSvg() {
           </div>
         )}
 
-        <div className="absolute bottom-2 left-2 right-2 flex flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:right-auto">
+        <div className="pointer-events-none absolute bottom-2 left-2 right-2 flex flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:right-auto">
           {continentLabels.map((c) => (
             <span
               key={c}
-              className="rounded-md px-2 py-0.5 text-[10px] font-medium text-white"
+              className="rounded-md px-2 py-0.5 text-[10px] font-medium text-white shadow-sm"
               style={{ backgroundColor: CONTINENT_COLORS[c] }}
             >
               {c}
             </span>
           ))}
-          <span className="rounded-full bg-pink-300/80 px-2 py-0.5 text-[10px] text-rose-900">
+          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
             정기 이동
+          </span>
+          <span className="rounded-full bg-slate-400 px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
+            드문 기록
           </span>
         </div>
       </div>
@@ -219,7 +292,6 @@ function MigrationMapSvg() {
     </div>
   );
 }
-
 export function SpoonbillMigrationCharts() {
   const scatterData = getProjectedHabitats().map((p) => ({
     ...p,
@@ -240,8 +312,7 @@ export function SpoonbillMigrationCharts() {
   const routeList = SPOONBILL_INFO.migrationRoutes;
 
   return (
-    <div className="space-y-4 sm:space-y-5">
-      <div>
+    <div className="space-y-4 overflow-visible sm:space-y-5">      <div>
         <h4 className="mb-2 font-display text-sm font-semibold text-text sm:text-base">
           🗺️ 현재 서식지 & 이동경로 (전 세계)
         </h4>

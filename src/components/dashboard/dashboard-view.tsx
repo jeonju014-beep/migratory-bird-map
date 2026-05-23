@@ -88,8 +88,10 @@ export function DashboardView({ data }: { data: DashboardData }) {
         <section className="grid gap-4 sm:gap-6 xl:grid-cols-2">
           <SpeciesPieChart data={data.summary.speciesCategories} />
           <div>
-            <SectionTitle>🌤️ 5일 날씨 요약</SectionTitle>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <SectionTitle className="mb-2 text-sm sm:text-base">
+              🌤️ 5일 날씨 요약
+            </SectionTitle>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
               {data.weather.map((item) => (
                 <WeatherMiniCard
                   key={item.city}
@@ -103,7 +105,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
           </div>
         </section>
 
-        <section className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+        <section className="grid gap-4 overflow-visible sm:gap-6 lg:grid-cols-2">
           <BirdSiteList sites={data.birdSites} />
           <WetlandList spots={data.wetlandSpots} />
         </section>

@@ -1,6 +1,5 @@
 import type { BirdSite, WetlandSpot } from "@/types/dashboard";
 import { stripHtml, truncate } from "@/lib/utils/format";
-
 /** 한국관광공사 TourAPI 상세 페이지 */
 export function getTourDetailUrl(contentId: string) {
   return `https://korean.visitkorea.or.kr/detail/ms_detail.do?contentId=${contentId}`;

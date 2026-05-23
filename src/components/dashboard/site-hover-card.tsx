@@ -3,6 +3,14 @@
 import { useState } from "react";
 import { ChevronDown, ExternalLink, MapPin, Phone } from "lucide-react";
 import { cn } from "@/lib/utils/format";
+import { SiteLocationMap } from "@/components/ui/site-location-map";
+
+export interface SiteLocationProps {
+  title: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+}
 
 export interface SiteDetailPanelProps {
   summary: string;
@@ -11,6 +19,7 @@ export interface SiteDetailPanelProps {
   mapUrl?: string;
   tel?: string;
   homepageLabel?: string;
+  location?: SiteLocationProps;
   className?: string;
 }
 
@@ -21,10 +30,23 @@ export function SiteDetailPanel({
   mapUrl,
   tel,
   homepageLabel = "공식·상세 페이지",
+  location,
   className,
 }: SiteDetailPanelProps) {
   return (
     <div className={cn("rounded-xl border border-border bg-bg/80 p-3", className)}>
+      {location && (
+        <div className="mb-3">
+          <p className="mb-1.5 text-xs font-semibold text-text-secondary">📍 위치</p>
+          <SiteLocationMap
+            title={location.title}
+            address={location.address}
+            latitude={location.latitude}
+            longitude={location.longitude}
+          />
+        </div>
+      )}
+
       <p className="mb-2 text-xs font-semibold text-text-secondary">주요 정보</p>
       <p className="text-sm leading-relaxed text-text">{summary}</p>
 
@@ -83,7 +105,7 @@ export function SiteHoverPanel(props: SiteDetailPanelProps) {
   return (
     <div
       className={cn(
-        "pointer-events-none absolute left-0 right-0 top-full z-30 mt-1 hidden translate-y-1 opacity-0 transition-all duration-200 md:block",
+        "pointer-events-none absolute left-0 right-0 top-full z-[60] mt-1 hidden translate-y-1 opacity-0 transition-all duration-200 md:block",
         "group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100",
         "group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100",
       )}

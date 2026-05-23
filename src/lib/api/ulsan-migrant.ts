@@ -116,7 +116,9 @@ export async function fetchUlsanBirdData(): Promise<UlsanBirdData> {
       numOfRows: "200",
     });
     spoonbillMaster = spoonResults.find(
-      (s) => s.science_name === "Platalea minor",
+      (s) =>
+        s.science_name === "Vanellus vanellus" ||
+        s.species_name === "댕기머리물떼새",
     );
   }
 

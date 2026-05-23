@@ -7,17 +7,19 @@ import type {
   UlsanBirdData,
 } from "@/types/regional";
 
+import { SPOONBILL_PRIMARY_IMAGE } from "@/lib/mock/spoonbill-images";
+
 export const MOCK_ULSAN_DATA: UlsanBirdData = {
   speciesCatalog: [],
   spoonbillMaster: {
     migrant_no: "usmgt094",
     species_name: "댕기머리물떼새",
-    science_name: "Platalea minor",
-    species_name_eng: "Black-faced Spoonbill",
-    habitat: "갯벌, 강 하구",
-    breedingplace: "무인도서·서해안",
-    classificationcode: "여름철새",
-    picture1: "http://usmigrant.ulsanbdc.or.kr/images/usmgt094_1.jpg",
+    science_name: "Vanellus vanellus",
+    species_name_eng: "Northern Lapwing",
+    habitat: "논, 갯벌, 하구·습지",
+    breedingplace: "유럽·서아시아(번식)",
+    classificationcode: "나그네새·월동",
+    picture1: SPOONBILL_PRIMARY_IMAGE,
   },
   taehwaLatestMonth: "2023-03",
   taehwaTotalCount: 6339,
