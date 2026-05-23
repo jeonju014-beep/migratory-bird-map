@@ -2,12 +2,13 @@ import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils/format";
 
 const variants = {
-  default: "bg-brand-soft text-brand",
-  success: "bg-success-soft text-success",
-  warning: "bg-warning-soft text-[#B45309]",
-  info: "bg-brand-soft text-brand",
-  soft: "bg-bg text-text-secondary",
-  accent: "bg-accent-soft text-accent font-semibold",
+  default: "bg-accent-soft text-accent",
+  success: "bg-success-soft text-teal-700",
+  warning: "bg-warning-soft text-amber-800",
+  info: "bg-sky-100 text-sky-700",
+  soft: "bg-brand-soft text-text-secondary",
+  accent: "bg-gradient-to-r from-pink-200 to-violet-200 text-rose-800 font-semibold",
+  love: "bg-gradient-to-r from-pink-300 to-violet-300 text-white font-semibold shadow-sm",
 };
 
 export function Badge({
@@ -24,7 +25,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
         variants[variant],
         className,
       )}

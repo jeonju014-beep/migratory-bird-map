@@ -291,8 +291,8 @@ export const CONTINENT_COLORS: Record<
   import("@/types/spoonbill").SpoonbillContinent,
   string
 > = {
-  아시아: "#3182F6",
-  유럽: "#6366F1",
-  북미: "#06B6D4",
-  기타: "#8B95A1",
+  아시아: "#f472b6",
+  유럽: "#818cf8",
+  북미: "#38bdf8",
+  기타: "#a3a3a3",
 };

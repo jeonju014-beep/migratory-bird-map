@@ -36,14 +36,14 @@ export function RegionScoreChart({ data }: { data: RegionScore[] }) {
   }));
 
   return (
-    <ChartCard title="지역별 철새 관측 추천지수">
+    <ChartCard title="📊 지역별 철새 관측 추천지수">
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
           <XAxis dataKey="name" tick={tickStyle} />
           <YAxis domain={[0, 100]} tick={tickStyle} />
           <Tooltip contentStyle={chartTooltipStyle} />
-          <Bar dataKey="score" fill={colors.brand} radius={[6, 6, 0, 0]} />
+          <Bar dataKey="score" fill="#f472b6" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>
@@ -52,7 +52,7 @@ export function RegionScoreChart({ data }: { data: RegionScore[] }) {
 
 export function WeatherTrendChart({ data }: { data: WeatherTrendPoint[] }) {
   return (
-    <ChartCard title="5일 기온·강수 추이">
+    <ChartCard title="🌈 5일 기온·강수 추이">
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
@@ -66,18 +66,18 @@ export function WeatherTrendChart({ data }: { data: WeatherTrendPoint[] }) {
             type="monotone"
             dataKey="temp"
             name="평균기온(°C)"
-            stroke={colors.brand}
-            strokeWidth={2}
-            dot={{ r: 3, fill: colors.brandSoft }}
+            stroke="#f472b6"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#fbcfe8" }}
           />
           <Line
             yAxisId="right"
             type="monotone"
             dataKey="pop"
             name="강수확률(%)"
-            stroke={colors.accent}
-            strokeWidth={2}
-            dot={{ r: 3, fill: colors.accentSoft }}
+            stroke="#c084fc"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#e9d5ff" }}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -90,9 +90,9 @@ export function SpeciesPieChart({ data }: { data: BirdSpeciesCategory[] }) {
   const total = enriched.reduce((sum, item) => sum + item.count, 0);
 
   return (
-    <ChartCard title="철새 종 분포">
+    <ChartCard title="🐦 철새 종 분포">
       <p className="-mt-2 mb-3 text-xs text-text-tertiary">
-        항목에 마우스를 올리면 종류별 설명을 볼 수 있습니다
+        파이 조각이나 아래 종류에 마우스를 올리면 설명 말풍선이 나타나요 ✨
       </p>
       <ResponsiveContainer width="100%" height={240}>
         <PieChart>

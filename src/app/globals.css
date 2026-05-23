@@ -2,49 +2,78 @@
 
 @theme {
   --font-sans: var(--font-noto), "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: var(--font-gaegu), cursive;
 
-  --color-brand: #3182f6;
-  --color-brand-soft: #e8f3ff;
-  --color-accent: #ff6b00;
-  --color-accent-soft: #fff4eb;
-  --color-bg: #f2f4f6;
+  --color-brand: #f472b6;
+  --color-brand-soft: #fce7f3;
+  --color-accent: #c084fc;
+  --color-accent-soft: #f3e8ff;
+  --color-bg: #fdf2f8;
   --color-surface: #ffffff;
-  --color-text: #191f28;
-  --color-text-secondary: #4e5968;
-  --color-text-tertiary: #8b95a1;
-  --color-border: #e5e8eb;
-  --color-success: #00c853;
-  --color-success-soft: #e8faf0;
-  --color-warning: #ffb020;
-  --color-warning-soft: #fff8e6;
+  --color-text: #831843;
+  --color-text-secondary: #9d174d;
+  --color-text-tertiary: #c084fc;
+  --color-border: #fbcfe8;
+  --color-success: #2dd4bf;
+  --color-success-soft: #ccfbf1;
+  --color-warning: #fcd34d;
+  --color-warning-soft: #fef9c3;
+  --color-mint: #5eead4;
+  --color-mint-soft: #ccfbf1;
 }
 
 :root {
-  --background: #f2f4f6;
-  --foreground: #191f28;
+  --background: #fdf2f8;
+  --foreground: #831843;
+  --cursor-spoonbill: url("/cursors/spoonbill-cursor.svg") 2 16, auto;
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(
+    135deg,
+    #fdf2f8 0%,
+    #faf5ff 35%,
+    #ecfeff 70%,
+    #fdf2f8 100%
+  );
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.01em;
+  cursor: var(--cursor-spoonbill);
+}
+
+a,
+button,
+[role="button"],
+select,
+label[for],
+summary {
+  cursor: var(--cursor-spoonbill);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea {
+  cursor: text;
+}
+
+.font-display {
+  font-family: var(--font-display), cursive;
 }
 
 * {
   box-sizing: border-box;
+  cursor: inherit;
 }
 
 .overflow-y-auto::-webkit-scrollbar {
   width: 6px;
 }
 .overflow-y-auto::-webkit-scrollbar-track {
-  background: #f2f4f6;
+  background: #fce7f3;
   border-radius: 999px;
 }
 .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: #d1d6db;
+  background: #f9a8d4;
   border-radius: 999px;
 }
