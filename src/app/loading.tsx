@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-violet-50 p-8">
+    <div className="min-h-screen bg-bg p-8">
       <Skeleton className="mb-6 h-16 w-full max-w-xl" />
       <Skeleton className="mb-6 h-48 w-full" />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

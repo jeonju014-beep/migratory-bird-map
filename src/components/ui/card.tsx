@@ -10,7 +10,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "relative rounded-2xl border border-rose-100/80 bg-white/75 shadow-md shadow-rose-100/40 backdrop-blur-sm",
+        "relative rounded-2xl border border-border bg-surface shadow-sm",
         className,
       )}
     >
@@ -37,14 +37,7 @@ export function CardTitle({
   children: React.ReactNode;
 }) {
   return (
-    <h3
-      className={cn(
-        "font-display text-base font-bold text-rose-900",
-        className,
-      )}
-    >
-      {children}
-    </h3>
+    <h3 className={cn("text-base font-bold text-text", className)}>{children}</h3>
   );
 }
 
@@ -56,7 +49,7 @@ export function CardDescription({
   children: React.ReactNode;
 }) {
   return (
-    <p className={cn("text-sm text-violet-500/80", className)}>{children}</p>
+    <p className={cn("text-sm text-text-secondary", className)}>{children}</p>
   );
 }
 
@@ -80,7 +73,7 @@ export function SectionTitle({
   return (
     <h2
       className={cn(
-        "font-display mb-4 flex items-center gap-2 text-lg font-bold text-rose-800",
+        "mb-4 text-lg font-bold tracking-tight text-text",
         className,
       )}
     >

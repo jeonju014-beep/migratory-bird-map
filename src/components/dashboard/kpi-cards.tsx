@@ -8,62 +8,55 @@ const items = [
     label: "철새 도래지",
     icon: MapPin,
     suffix: "곳",
-    iconClass: "text-pink-500",
-    bgClass: "bg-pink-100/80",
-    cardClass: "hover:border-pink-200",
+    iconClass: "text-brand",
+    bgClass: "bg-brand-soft",
   },
   {
     key: "wetlandCount",
     label: "습지·수변 명소",
     icon: Droplets,
     suffix: "곳",
-    iconClass: "text-teal-500",
-    bgClass: "bg-teal-100/80",
-    cardClass: "hover:border-teal-200",
+    iconClass: "text-[#06B6D4]",
+    bgClass: "bg-[#E0F7FA]",
   },
   {
     key: "recommendationScore",
     label: "관측 추천지수",
     icon: Sparkles,
     suffix: "점",
-    iconClass: "text-violet-500",
-    bgClass: "bg-violet-100/80",
-    cardClass: "hover:border-violet-200",
+    iconClass: "text-accent",
+    bgClass: "bg-accent-soft",
   },
   {
     key: "speciesCount",
     label: "관측 가능 종수",
     icon: Bird,
     suffix: "종",
-    iconClass: "text-rose-500",
-    bgClass: "bg-rose-100/80",
-    cardClass: "hover:border-rose-200",
+    iconClass: "text-success",
+    bgClass: "bg-success-soft",
   },
 ] as const;
 
 export function KpiCards({ summary }: { summary: DashboardSummary }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {items.map((item) => {
         const Icon = item.icon;
         const value = summary[item.key];
 
         return (
-          <Card
-            key={item.key}
-            className={`transition hover:shadow-lg hover:shadow-pink-100/50 ${item.cardClass}`}
-          >
+          <Card key={item.key} className="transition hover:border-brand/30">
             <CardContent className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-violet-500/80">{item.label}</p>
-                <p className="font-display mt-2 text-3xl font-bold text-rose-800">
+                <p className="text-sm text-text-secondary">{item.label}</p>
+                <p className="mt-1 text-2xl font-bold tracking-tight text-text">
                   {value}
-                  <span className="ml-1 text-base font-medium text-pink-300">
+                  <span className="ml-1 text-base font-medium text-text-tertiary">
                     {item.suffix}
                   </span>
                 </p>
               </div>
-              <div className={`rounded-2xl p-3 ${item.bgClass}`}>
+              <div className={`rounded-xl p-2.5 ${item.bgClass}`}>
                 <Icon className={`h-5 w-5 ${item.iconClass}`} />
               </div>
             </CardContent>
@@ -86,14 +79,14 @@ export function WeatherMiniCard({
   description: string;
 }) {
   return (
-    <Card className="transition hover:border-sky-200 hover:shadow-md hover:shadow-sky-100/40">
+    <Card className="transition hover:border-brand/30">
       <CardContent className="flex items-center gap-3">
-        <div className="rounded-2xl bg-sky-100/80 p-2.5">
-          <Thermometer className="h-4 w-4 text-sky-500" />
+        <div className="rounded-xl bg-brand-soft p-2.5">
+          <Thermometer className="h-4 w-4 text-brand" />
         </div>
         <div>
-          <p className="font-medium text-rose-900">{city}</p>
-          <p className="text-xs text-violet-500/80">
+          <p className="font-semibold text-text">{city}</p>
+          <p className="text-xs text-text-secondary">
             {tempMin}° ~ {tempMax}° · {description}
           </p>
         </div>

@@ -1,22 +1,16 @@
 import type { Metadata } from "next";
-import { Gaegu, Noto_Sans_KR } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
 const notoSans = Noto_Sans_KR({
   variable: "--font-noto",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const gaegu = Gaegu({
-  variable: "--font-gaegu",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "철새 맵 ✨ | 댕기머리물떼새와 함께하는 철새 여행",
-  description: "철새 도래 현황과 댕기머리물떼새 세계 서식지를 한눈에 보는 대시보드",
+  title: "철새 맵 | 철새 도래 현황",
+  description: "철새 도래지, 습지, 날씨와 댕기머리물떼새 정보를 한곳에서 확인하세요.",
 };
 
 export default function RootLayout({
@@ -26,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${notoSans.variable} ${gaegu.variable} antialiased`}>
-        {children}
-      </body>
+      <body className={`${notoSans.variable} antialiased`}>{children}</body>
     </html>
   );
 }

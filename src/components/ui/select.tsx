@@ -18,7 +18,7 @@ export function Select({
       value={value}
       onChange={(event) => onChange(event.target.value)}
       className={cn(
-        "h-10 rounded-2xl border border-rose-200/80 bg-white/90 px-4 text-sm text-rose-900 shadow-sm outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100",
+        "h-11 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-text shadow-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand-soft",
         className,
       )}
     >
