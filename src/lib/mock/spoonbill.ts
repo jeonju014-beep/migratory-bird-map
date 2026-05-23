@@ -1,0 +1,85 @@
+import type { SpoonbillInfo } from "@/types/spoonbill";
+
+/** 댕기머리물떼새(Platalea minor) — 국제 조류 센서스·IUCN 자료 기반 교육용 추정치 */
+export const SPOONBILL_INFO: SpoonbillInfo = {
+  koreanName: "댕기머리물떼새",
+  englishName: "Black-faced Spoonbill",
+  scientificName: "Platalea minor",
+  conservationStatus: "세계자연보전연맹(IUCN) · 멸종위기(EN)",
+  totalPopulation: 7066,
+  censusYear: "2024",
+  censusNote:
+    "동아시아·동남아시아 33개 지역 동시 조사 기준 추정 개체수입니다. 매년 1월 국제 센서스로 갱신됩니다.",
+  description:
+    "흰 깃과 검은 얼굴, 넓적한 부리가 특징인 물새예요. 한반도 서해안 섬에서 번식하고, 겨울에는 대만·홍콩·베트남 등으로 이동해요. 세계 개체수의 절반 이상이 우리나라와 주변 습지에 의존하는 아주 소중한 종이에요.",
+  habitats: [
+    {
+      id: "h1",
+      region: "대만",
+      country: "Taiwan",
+      habitatName: "台南七股(치구)·曾文溪口(증문 하구) 등 서부 습지",
+      season: "월동",
+      estimatedCount: 4231,
+      note: "세계 최대 월동지 · 전체의 약 60%",
+    },
+    {
+      id: "h2",
+      region: "중국 본토",
+      country: "China",
+      habitatName: "요녕 대련·랴oning 해안, 푸젠·하이난 연안",
+      season: "번식",
+      estimatedCount: 980,
+      note: "번식지·월동지 혼재",
+    },
+    {
+      id: "h3",
+      region: "대한민국",
+      country: "Korea",
+      habitatName: "서해5도·강화·연평, 고흥·신안 갯벌",
+      season: "번식",
+      estimatedCount: 850,
+      note: "국내 유일 번식종 · 세계 개체의 약 12%",
+    },
+    {
+      id: "h4",
+      region: "홍콩·마카오",
+      country: "Hong Kong",
+      habitatName: "Deep Bay(后海灣) · 마이포(米埔) 자연보호구역",
+      season: "월동",
+      estimatedCount: 422,
+    },
+    {
+      id: "h5",
+      region: "베트남",
+      country: "Vietnam",
+      habitatName: "Red River Delta(북부), Mekong Delta(남부)",
+      season: "월동",
+      estimatedCount: 380,
+    },
+    {
+      id: "h6",
+      region: "일본",
+      country: "Japan",
+      habitatName: "큐슈·오키나와·아리아케해 연안",
+      season: "월동",
+      estimatedCount: 210,
+    },
+    {
+      id: "h7",
+      region: "필리핀",
+      country: "Philippines",
+      habitatName: "Palawan·Cebu 연안 습지",
+      season: "월동",
+      estimatedCount: 45,
+    },
+    {
+      id: "h8",
+      region: "태국·기타",
+      country: "Others",
+      habitatName: "걸프 of Thailand 연안 등",
+      season: "이동",
+      estimatedCount: 48,
+      note: "이동·소규모 월동 개체",
+    },
+  ],
+};

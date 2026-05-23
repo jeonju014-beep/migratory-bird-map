@@ -1,16 +1,69 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: var(--font-gaegu), cursive;
+  --font-sans: var(--font-noto), sans-serif;
+}
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #fdf2f8;
+  --foreground: #581c87;
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --accent-pink: #f472b6;
+  --accent-lavender: #c084fc;
+  --accent-mint: #5eead4;
+  /* 부리 끝(2, 16)을 클릭 포인트로 */
+  --cursor-spoonbill: url("/cursors/spoonbill-cursor.svg") 2 16, auto;
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(
+    135deg,
+    #fdf2f8 0%,
+    #faf5ff 35%,
+    #ecfeff 70%,
+    #fdf2f8 100%
+  );
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), "Apple SD Gothic Neo", sans-serif;
+  min-height: 100vh;
+  cursor: var(--cursor-spoonbill);
+}
+
+a,
+button,
+[role="button"],
+select,
+label[for],
+summary,
+.cursor-spoonbill {
+  cursor: var(--cursor-spoonbill);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea {
+  cursor: text;
+}
+
+.font-display {
+  font-family: var(--font-display), cursive;
 }
 
 * {
   box-sizing: border-box;
+  cursor: inherit;
+}
+
+/* 부드러운 스크롤바 (서식지 목록) */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #fce7f3;
+  border-radius: 999px;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #f9a8d4;
+  border-radius: 999px;
 }

@@ -19,6 +19,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { BirdSpeciesCategory, RegionScore } from "@/types/dashboard";
 import type { WeatherTrendPoint } from "@/types/weather";
 
+const tooltipStyle = {
+  borderRadius: "16px",
+  border: "1px solid #fbcfe8",
+  background: "#fff1f2",
+};
+
 export function RegionScoreChart({ data }: { data: RegionScore[] }) {
   const chartData = data.map((item) => ({
     name: item.regionName,
@@ -26,14 +32,14 @@ export function RegionScoreChart({ data }: { data: RegionScore[] }) {
   }));
 
   return (
-    <ChartCard title="지역별 철새 관측 추천지수">
+    <ChartCard title="📊 지역별 철새 관측 추천지수">
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-          <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
-          <Tooltip />
-          <Bar dataKey="score" fill="#0ea5e9" radius={[6, 6, 0, 0]} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#fce7f3" />
+          <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#9d174d" }} />
+          <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "#7c3aed" }} />
+          <Tooltip contentStyle={tooltipStyle} />
+          <Bar dataKey="score" fill="#f472b6" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>
@@ -42,32 +48,32 @@ export function RegionScoreChart({ data }: { data: RegionScore[] }) {
 
 export function WeatherTrendChart({ data }: { data: WeatherTrendPoint[] }) {
   return (
-    <ChartCard title="5일 기온·강수 추이">
+    <ChartCard title="🌈 5일 기온·강수 추이">
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-          <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
-          <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
-          <Tooltip />
+          <CartesianGrid strokeDasharray="3 3" stroke="#fce7f3" />
+          <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#9d174d" }} />
+          <YAxis yAxisId="left" tick={{ fontSize: 11, fill: "#7c3aed" }} />
+          <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11, fill: "#7c3aed" }} />
+          <Tooltip contentStyle={tooltipStyle} />
           <Legend />
           <Line
             yAxisId="left"
             type="monotone"
             dataKey="temp"
             name="평균기온(°C)"
-            stroke="#0ea5e9"
-            strokeWidth={2}
-            dot={{ r: 3 }}
+            stroke="#f472b6"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#fbcfe8" }}
           />
           <Line
             yAxisId="right"
             type="monotone"
             dataKey="pop"
             name="강수확률(%)"
-            stroke="#8b5cf6"
-            strokeWidth={2}
-            dot={{ r: 3 }}
+            stroke="#c084fc"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#e9d5ff" }}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -77,7 +83,7 @@ export function WeatherTrendChart({ data }: { data: WeatherTrendPoint[] }) {
 
 export function SpeciesPieChart({ data }: { data: BirdSpeciesCategory[] }) {
   return (
-    <ChartCard title="철새 종 분포 (카테고리)">
+    <ChartCard title="🐦 철새 종 분포">
       <ResponsiveContainer width="100%" height={280}>
         <PieChart>
           <Pie
@@ -95,7 +101,7 @@ export function SpeciesPieChart({ data }: { data: BirdSpeciesCategory[] }) {
               <Cell key={entry.name} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip contentStyle={tooltipStyle} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

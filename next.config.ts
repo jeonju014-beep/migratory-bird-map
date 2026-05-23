@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
+        remotePatterns: [
       {
         protocol: "http",
         hostname: "tong.visitkorea.or.kr",
@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "tong.visitkorea.or.kr",
+      },
+      {
+        protocol: "http",
+        hostname: "usmigrant.ulsanbdc.or.kr",
       },
     ],
   },

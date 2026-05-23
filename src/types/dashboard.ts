@@ -59,6 +59,7 @@ export interface DashboardData {
   wetlandSpots: WetlandSpot[];
   weather: import("./weather").WeatherSummary[];
   weatherTrend: import("./weather").WeatherTrendPoint[];
+  extended: import("./regional").ExtendedDashboardData;
   updatedAt: string;
   isMock: boolean;
 }

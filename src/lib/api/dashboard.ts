@@ -1,12 +1,17 @@
 import "server-only";
 
 import { fetchAllWeather, fetchBirdSites, fetchWetlandSpots } from "@/lib/api/clients";
+import { getExtendedData } from "@/lib/api/extended-data";
 import { REGIONS } from "@/lib/constants";
 import {
   getMockDashboardData,
   MOCK_REGION_SCORES,
   MOCK_SPECIES,
 } from "@/lib/mock/data";
+import {
+  getMockRegionalData,
+  getMockUlsanData,
+} from "@/lib/mock/regional-fallback";
 import {
   buildRegionScores,
   estimateSpeciesCount,
@@ -19,16 +24,21 @@ export async function getDashboardData(areaCode = "0"): Promise<DashboardData> {
   try {
     const wetlandPromise =
       areaCode === "0"
-        ? Promise.resolve({ data: getMockDashboardData("0").wetlandSpots, isMock: true })
+        ? Promise.resolve({
+            data: getMockDashboardData("0").wetlandSpots,
+            isMock: true,
+          })
         : "riverCode" in region && region.riverCode
           ? fetchWetlandSpots(region.riverCode)
           : Promise.resolve({ data: [], isMock: false });
 
-    const [birdResult, wetlandResult, weatherResult] = await Promise.allSettled([
-      fetchBirdSites(areaCode),
-      wetlandPromise,
-      fetchAllWeather(),
-    ]);
+    const [birdResult, wetlandResult, weatherResult, extendedResult] =
+      await Promise.allSettled([
+        fetchBirdSites(areaCode),
+        wetlandPromise,
+        fetchAllWeather(),
+        getExtendedData(),
+      ]);
 
     const birdSites =
       birdResult.status === "fulfilled" ? birdResult.value.data : [];
@@ -42,6 +52,10 @@ export async function getDashboardData(areaCode = "0"): Promise<DashboardData> {
       weatherResult.status === "fulfilled"
         ? weatherResult.value.trend
         : getMockDashboardData(areaCode).weatherTrend;
+    const extended =
+      extendedResult.status === "fulfilled"
+        ? extendedResult.value
+        : { ulsan: getMockUlsanData(), regional: getMockRegionalData() };
 
     const isMock =
       birdSites.length === 0 &&
@@ -49,7 +63,7 @@ export async function getDashboardData(areaCode = "0"): Promise<DashboardData> {
       weatherResult.status !== "fulfilled";
 
     if (isMock) {
-      return getMockDashboardData(areaCode);
+      return { ...getMockDashboardData(areaCode), extended };
     }
 
     const speciesCount = estimateSpeciesCount(
@@ -87,17 +101,30 @@ export async function getDashboardData(areaCode = "0"): Promise<DashboardData> {
         regionScores,
         speciesCategories: MOCK_SPECIES,
       },
-      birdSites: birdSites.length > 0 ? birdSites : getMockDashboardData(areaCode).birdSites,
+      birdSites:
+        birdSites.length > 0
+          ? birdSites
+          : getMockDashboardData(areaCode).birdSites,
       wetlandSpots:
         wetlandSpots.length > 0
           ? wetlandSpots
           : getMockDashboardData(areaCode).wetlandSpots,
       weather,
       weatherTrend,
+      extended,
       updatedAt: new Date().toISOString(),
-      isMock: birdResult.status !== "fulfilled" || weatherResult.status !== "fulfilled",
+      isMock:
+        birdResult.status !== "fulfilled" ||
+        weatherResult.status !== "fulfilled" ||
+        extended.ulsan.isMock,
     };
   } catch {
-    return getMockDashboardData(areaCode);
+    return {
+      ...getMockDashboardData(areaCode),
+      extended: {
+        ulsan: getMockUlsanData(),
+        regional: getMockRegionalData(),
+      },
+    };
   }
 }

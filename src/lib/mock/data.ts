@@ -6,6 +6,7 @@ import type {
   WetlandSpot,
 } from "@/types/dashboard";
 import type { WeatherSummary, WeatherTrendPoint } from "@/types/weather";
+import { getMockRegionalData, getMockUlsanData } from "@/lib/mock/regional-fallback";
 import { REGIONS } from "@/lib/constants";
 
 export const MOCK_BIRD_SITES: BirdSite[] = [
@@ -90,11 +91,11 @@ export const MOCK_WETLAND_SPOTS: WetlandSpot[] = [
 ];
 
 export const MOCK_SPECIES: BirdSpeciesCategory[] = [
-  { name: "물새", count: 42, color: "#0ea5e9" },
-  { name: "떼새", count: 28, color: "#8b5cf6" },
-  { name: "맹금류", count: 15, color: "#f59e0b" },
-  { name: "물닭·원앙", count: 22, color: "#10b981" },
-  { name: "기타", count: 18, color: "#64748b" },
+  { name: "물새", count: 42, color: "#f9a8d4" },
+  { name: "떼새", count: 28, color: "#c4b5fd" },
+  { name: "맹금류", count: 15, color: "#fcd34d" },
+  { name: "물닭·원앙", count: 22, color: "#5eead4" },
+  { name: "기타", count: 18, color: "#fda4af" },
 ];
 
 export const MOCK_WEATHER: WeatherSummary[] = [
@@ -271,6 +272,10 @@ export function getMockDashboardData(areaCode = "0"): DashboardData {
     wetlandSpots: wetlands,
     weather: MOCK_WEATHER,
     weatherTrend: MOCK_WEATHER_TREND,
+    extended: {
+      ulsan: getMockUlsanData(),
+      regional: getMockRegionalData(),
+    },
     updatedAt: new Date().toISOString(),
     isMock: true,
   };

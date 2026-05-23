@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Gaegu, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSans = Noto_Sans_KR({
+  variable: "--font-noto",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const gaegu = Gaegu({
+  variable: "--font-gaegu",
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "철새 맵",
-  description: "대한민국 실시간 철새 도래 현황 대시보드",
+  title: "철새 맵 ✨ | 댕기머리물떼새와 함께하는 철새 여행",
+  description: "철새 도래 현황과 댕기머리물떼새 세계 서식지를 한눈에 보는 대시보드",
 };
 
 export default function RootLayout({
@@ -24,9 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${notoSans.variable} ${gaegu.variable} antialiased`}>
         {children}
       </body>
     </html>
