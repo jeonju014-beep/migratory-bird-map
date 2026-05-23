@@ -15,6 +15,7 @@ import {
 import { SpoonbillMigrationCharts } from "@/components/dashboard/spoonbill-migration-charts";
 import { SpoonbillPhotoRotator } from "@/components/dashboard/spoonbill-photo-rotator";
 import { Badge } from "@/components/ui/badge";
+import { useIsMobile } from "@/hooks/use-media-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   chartPalette,
@@ -48,6 +49,7 @@ export function SpoonbillSpotlight({
   const [continentFilter, setContinentFilter] = useState<
     SpoonbillContinent | "전체"
   >("전체");
+  const isMobile = useIsMobile();
 
   const info = SPOONBILL_INFO;
   const displayName = ulsanMaster?.species_name ?? info.koreanName;
@@ -73,15 +75,18 @@ export function SpoonbillSpotlight({
     <Card className="overflow-hidden border-rose-200/80 bg-gradient-to-br from-white via-rose-50/80 to-violet-50/60 shadow-lg shadow-rose-100/50">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-300 via-rose-300 to-violet-300" />
 
-      <CardHeader className="relative space-y-3 px-5 py-5 sm:px-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+      <CardHeader className="relative space-y-3 px-4 py-4 sm:px-6 sm:py-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <Badge variant="love">🦢 MY FAVORITE</Badge>
-              <Badge variant="soft">멸종위기종</Badge>
-              <Badge variant="info">아시아·유럽·북미</Badge>
+            <div className="mb-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <Badge variant="love" className="text-[10px] sm:text-xs">
+                🦢 MY FAVORITE
+              </Badge>
+              <Badge variant="soft" className="text-[10px] sm:text-xs">
+                멸종위기종
+              </Badge>
             </div>
-            <CardTitle className="text-2xl sm:text-3xl">{displayName}</CardTitle>
+            <CardTitle className="text-xl sm:text-3xl">{displayName}</CardTitle>
             <p className="mt-1 text-sm italic text-text-tertiary">
               {englishName} · {scientificName}
             </p>
@@ -89,9 +94,9 @@ export function SpoonbillSpotlight({
               <p className="mt-1 text-xs text-sky-600">✦ {extraNote}</p>
             )}
           </div>
-          <div className="shrink-0 rounded-2xl bg-white/80 px-5 py-4 text-center shadow-sm ring-1 ring-rose-100">
+          <div className="w-full shrink-0 rounded-2xl bg-white/80 px-4 py-3 text-center shadow-sm ring-1 ring-rose-100 sm:w-auto sm:px-5 sm:py-4">
             <p className="text-xs font-medium text-pink-400">아시아 주요 서식 개체</p>
-            <p className="font-display text-4xl font-bold text-brand">
+            <p className="font-display text-3xl font-bold text-brand sm:text-4xl">
               {info.totalPopulation.toLocaleString()}
               <span className="ml-1 text-lg text-pink-300">마리</span>
             </p>
@@ -100,15 +105,12 @@ export function SpoonbillSpotlight({
             </p>
           </div>
         </div>
-        <p className="max-w-3xl text-sm leading-relaxed text-text-secondary">
+        <p className="max-w-3xl text-sm leading-relaxed text-text-secondary sm:text-base">
           {info.description}
-        </p>
-        <p className="max-w-3xl text-sm leading-relaxed text-text-tertiary/90">
-          {info.globalNote}
         </p>
       </CardHeader>
 
-      <CardContent className="space-y-6 px-5 pb-6 pt-0 sm:px-6">
+      <CardContent className="space-y-5 px-4 pb-5 pt-0 sm:space-y-6 sm:px-6 sm:pb-6">
         <SpoonbillPhotoRotator apiPictureUrl={ulsanMaster?.picture1} />
         <SpoonbillMigrationCharts />
 
@@ -198,14 +200,14 @@ export function SpoonbillSpotlight({
               아시아 주요 서식지 개체수
             </h4>
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={chartData} layout="vertical" margin={{ left: 4 }}>
+              <BarChart data={chartData} layout="vertical" margin={{ left: 4, right: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
-                <XAxis type="number" tick={{ fontSize: 11, fill: colors.textSecondary }} />
+                <XAxis type="number" tick={{ fontSize: 10, fill: colors.textSecondary }} />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  width={72}
-                  tick={{ fontSize: 11, fill: colors.textSecondary }}
+                  width={isMobile ? 56 : 72}
+                  tick={{ fontSize: isMobile ? 9 : 11, fill: colors.textSecondary }}
                 />
                 <Tooltip contentStyle={chartTooltipStyle} />
                 <Bar dataKey="count" name="개체수" radius={[0, 8, 8, 0]}>

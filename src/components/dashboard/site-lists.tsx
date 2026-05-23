@@ -1,10 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  InlineSiteLinks,
-  SiteHoverPanel,
-  SiteListItem,
-} from "@/components/dashboard/site-hover-card";
+import { SiteListItem } from "@/components/dashboard/site-hover-card";
 import { stripHtml, truncate } from "@/lib/utils/format";
 import { enrichBirdSite, enrichWetlandSpot } from "@/lib/utils/site-links";
 import type { BirdSite, WetlandSpot } from "@/types/dashboard";
@@ -14,13 +10,14 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
 
   return (
     <Card className="h-full">
-      <CardHeader>
+      <CardHeader className="px-4 pb-2 pt-4 sm:p-5 sm:pb-2">
         <CardTitle>철새 도래지 목록</CardTitle>
         <p className="text-xs text-text-tertiary">
-          마우스를 올리면 요약과 링크를 확인할 수 있습니다
+          <span className="md:hidden">「자세히 보기」를 눌러 정보를 확인하세요</span>
+          <span className="hidden md:inline">마우스를 올리면 요약과 링크를 확인할 수 있어요</span>
         </p>
       </CardHeader>
-      <CardContent className="overflow-visible">
+      <CardContent className="overflow-visible px-3 pb-4 sm:p-5 sm:pt-3">
         {enriched.length === 0 ? (
           <EmptyState message="선택한 지역에 등록된 철새 도래지가 없습니다" />
         ) : (
@@ -28,25 +25,24 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
             {enriched.map((site) => (
               <SiteListItem
                 key={site.id}
-                hoverPanel={
-                  <SiteHoverPanel
-                    summary={site.summary ?? site.title}
-                    highlights={site.highlights}
-                    homepageUrl={site.homepageUrl}
-                    mapUrl={site.mapUrl}
-                    tel={site.tel}
-                    homepageLabel={
-                      site.source === "tour"
-                        ? "대한민국 구석구석"
-                        : "상세·공식 정보"
-                    }
-                  />
-                }
+                detailPanel={{
+                  summary: site.summary ?? site.title,
+                  highlights: site.highlights,
+                  homepageUrl: site.homepageUrl,
+                  mapUrl: site.mapUrl,
+                  tel: site.tel,
+                  homepageLabel:
+                    site.source === "tour"
+                      ? "대한민국 구석구석"
+                      : "상세·공식 정보",
+                }}
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-text">{site.title}</p>
-                    <p className="mt-0.5 text-xs text-text-tertiary">{site.address}</p>
+                    <p className="mt-0.5 break-words text-xs text-text-tertiary">
+                      {site.address}
+                    </p>
                   </div>
                   <Badge variant={site.source === "mock" ? "warning" : "success"}>
                     {site.source === "mock" ? "샘플" : "Live"}
@@ -57,10 +53,6 @@ export function BirdSiteList({ sites }: { sites: BirdSite[] }) {
                     {truncate(stripHtml(site.overview), 80)}
                   </p>
                 )}
-                <InlineSiteLinks
-                  homepageUrl={site.homepageUrl}
-                  mapUrl={site.mapUrl}
-                />
               </SiteListItem>
             ))}
           </ul>
@@ -75,13 +67,14 @@ export function WetlandList({ spots }: { spots: WetlandSpot[] }) {
 
   return (
     <Card className="h-full">
-      <CardHeader>
+      <CardHeader className="px-4 pb-2 pt-4 sm:p-5 sm:pb-2">
         <CardTitle>습지·수변 명소</CardTitle>
         <p className="text-xs text-text-tertiary">
-          마우스를 올리면 요약과 링크를 확인할 수 있습니다
+          <span className="md:hidden">「자세히 보기」를 눌러 정보를 확인하세요</span>
+          <span className="hidden md:inline">마우스를 올리면 요약과 링크를 확인할 수 있어요</span>
         </p>
       </CardHeader>
-      <CardContent className="overflow-visible">
+      <CardContent className="overflow-visible px-3 pb-4 sm:p-5 sm:pt-3">
         {enriched.length === 0 ? (
           <EmptyState message="습지·수변 명소 데이터가 없습니다" />
         ) : (
@@ -89,20 +82,20 @@ export function WetlandList({ spots }: { spots: WetlandSpot[] }) {
             {enriched.map((spot) => (
               <SiteListItem
                 key={spot.id}
-                hoverPanel={
-                  <SiteHoverPanel
-                    summary={spot.summary ?? spot.title}
-                    highlights={spot.highlights}
-                    homepageUrl={spot.homepageUrl}
-                    mapUrl={spot.mapUrl}
-                    homepageLabel="관련 정보·홈페이지"
-                  />
-                }
+                detailPanel={{
+                  summary: spot.summary ?? spot.title,
+                  highlights: spot.highlights,
+                  homepageUrl: spot.homepageUrl,
+                  mapUrl: spot.mapUrl,
+                  homepageLabel: "관련 정보·홈페이지",
+                }}
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-text">{spot.title}</p>
-                    <p className="mt-0.5 text-xs text-text-tertiary">{spot.address}</p>
+                    <p className="mt-0.5 break-words text-xs text-text-tertiary">
+                      {spot.address}
+                    </p>
                   </div>
                   <Badge variant={spot.source === "mock" ? "warning" : "info"}>
                     {spot.source === "mock" ? "샘플" : "Live"}
@@ -113,10 +106,6 @@ export function WetlandList({ spots }: { spots: WetlandSpot[] }) {
                     {truncate(spot.description, 80)}
                   </p>
                 )}
-                <InlineSiteLinks
-                  homepageUrl={spot.homepageUrl}
-                  mapUrl={spot.mapUrl}
-                />
               </SiteListItem>
             ))}
           </ul>

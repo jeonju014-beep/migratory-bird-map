@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     "철새 도래지, 습지, 날씨와 댕기머리물떼새 정보를 귀엽게 한눈에!",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover" as const,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

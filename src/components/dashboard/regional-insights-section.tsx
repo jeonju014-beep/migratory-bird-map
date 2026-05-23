@@ -18,6 +18,7 @@ import {
   colors,
 } from "@/lib/design/tokens";
 import { truncate } from "@/lib/utils/format";
+import { BirdNameHover, BirdNamesText } from "@/components/ui/bird-name-hover";
 import type { RegionalData } from "@/types/regional";
 
 export function RegionalInsightsSection({ data }: { data: RegionalData }) {
@@ -55,7 +56,7 @@ export function RegionalInsightsSection({ data }: { data: RegionalData }) {
                 </p>
                 <p className="mt-0.5 text-xs text-text-secondary">{site.장소}</p>
                 <p className="mt-1.5 text-sm text-text-secondary">
-                  {site.도래철새?.replace(/\./g, " · ")}
+                  <BirdNamesText text={site.도래철새?.replace(/\./g, " · ") ?? ""} />
                 </p>
               </div>
             ))}
@@ -130,7 +131,10 @@ export function RegionalInsightsSection({ data }: { data: RegionalData }) {
                 >
                   <div>
                     <p className="text-sm font-semibold text-text">
-                      {bird["국명(원병오2000)"]}
+                      <BirdNameHover
+                        name={bird["국명(원병오2000)"] ?? ""}
+                        variant="list"
+                      />
                       {bird["보호종 여부"] === "Y" && (
                         <Badge variant="soft" className="ml-2">
                           보호종

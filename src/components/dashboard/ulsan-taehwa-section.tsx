@@ -13,8 +13,8 @@ import {
   YAxis,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SectionTitle } from "@/components/ui/card";
+import { BirdNameHover } from "@/components/ui/bird-name-hover";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";import { SectionTitle } from "@/components/ui/card";
 import {
   chartGridStroke,
   chartTooltipStyle,
@@ -22,8 +22,7 @@ import {
 } from "@/lib/design/tokens";
 import type { UlsanBirdData } from "@/types/regional";
 
-export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {
-  return (
+export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {  return (
     <section>
       <SectionTitle>울산 태화강 철새 출현</SectionTitle>
       <div className="grid gap-4 lg:grid-cols-2">
@@ -69,6 +68,9 @@ export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {
         <Card>
           <CardHeader>
             <CardTitle>태화강 상위 종 ({data.taehwaLatestMonth})</CardTitle>
+            <p className="text-xs text-text-tertiary">
+              종 이름에 마우스를 올리면 사진·설명을 볼 수 있어요
+            </p>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={220}>
@@ -85,6 +87,19 @@ export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {
                 <Bar dataKey="count" fill={colors.brand} radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
+            <ul className="mt-3 space-y-1 border-t border-border pt-3">
+              {data.taehwaTopSpecies.map((species) => (
+                <li
+                  key={species.name}
+                  className="flex items-center justify-between gap-2 text-xs"
+                >
+                  <BirdNameHover name={species.name} variant="list" />
+                  <span className="shrink-0 font-semibold text-brand">
+                    {species.count.toLocaleString()}마리
+                  </span>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
       </div>
@@ -108,7 +123,7 @@ export function UlsanTaehwaSection({ data }: { data: UlsanBirdData }) {
                 울산 관측 종 마스터
               </Badge>
               <h4 className="text-lg font-bold text-text">
-                {data.spoonbillMaster.species_name}{" "}
+                <BirdNameHover name={data.spoonbillMaster.species_name} variant="list" />{" "}
                 <span className="text-sm font-normal text-text-secondary">
                   ({data.spoonbillMaster.science_name})
                 </span>
