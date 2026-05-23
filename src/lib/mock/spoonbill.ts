@@ -201,10 +201,10 @@ export const SPOONBILL_INFO: SpoonbillInfo = {
   ],
 };
 
-/** 위도·경도를 SVG 지도 좌표(%)로 변환 — 아시아-태평양+유럽+북미 전역 */
+/** 위도·경도를 SVG 지도 좌표(%)로 변환 — 세계 지형 지도(정사도)와 맞춤 */
 export function projectSpoonbillPoint(lat: number, lon: number) {
-  const x = ((lon + 170) / 360) * 100;
-  const y = ((62 - lat) / 85) * 100;
+  const x = ((lon + 180) / 360) * 100;
+  const y = ((90 - lat) / 180) * 100;
   return {
     x: Math.min(98, Math.max(2, x)),
     y: Math.min(96, Math.max(4, y)),

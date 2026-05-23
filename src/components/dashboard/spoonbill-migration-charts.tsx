@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";import {
+import { useState } from "react";
+import {
   CONTINENT_COLORS,
   getProjectedHabitats,
   projectRoute,
@@ -15,6 +16,7 @@ import {
   chartTooltipStyle,
   colors,
 } from "@/lib/design/tokens";
+import { getWorldMigrationMapUrls } from "@/lib/utils/map-url";
 import {
   Bar,
   BarChart,
@@ -31,6 +33,9 @@ import {
 } from "recharts";
 
 const continentLabels: SpoonbillContinent[] = ["아시아", "유럽", "북미"];
+const WORLD_MAP_URLS = getWorldMigrationMapUrls();
+/** 서식지 점 표시 크기 (기본 대비 30% 축소) */
+const HABITAT_DOT_SCALE = 0.7;
 
 function formatPointCount(point: ProjectedPoint) {
   if (point.role === "드문관찰") {
@@ -63,67 +68,56 @@ function MapPointInfo({ point }: { point: ProjectedPoint }) {
   );
 }
 
-function MapLandmasses() {
+function MapLandmassesFallback() {
   return (
     <g aria-hidden>
-      {/* 바다 그리드 */}
-      {[20, 40, 60, 80].map((value) => (
-        <g key={value} opacity={0.35}>
-          <line
-            x1={value}
-            y1={0}
-            x2={value}
-            y2={100}
-            stroke="#93c5fd"
-            strokeWidth={0.12}
-            strokeDasharray="0.8 0.8"
-          />
-          <line
-            x1={0}
-            y1={value}
-            x2={100}
-            y2={value}
-            stroke="#93c5fd"
-            strokeWidth={0.12}
-            strokeDasharray="0.8 0.8"
-          />
-        </g>
-      ))}
-
-      {/* 단순화된 육지 윤곽 (아시아·유럽·북미 서부) */}
+      <rect x={0} y={0} width={100} height={100} fill="#dbeafe" />
       <path
-        d="M 48 8 C 56 6, 62 10, 66 16 C 70 22, 74 28, 78 34 C 84 38, 92 36, 97 40 C 99 46, 96 54, 88 58 C 80 62, 72 58, 68 52 C 64 46, 58 42, 52 38 C 48 32, 44 24, 48 8 Z"
-        fill="#dcfce7"
-        stroke="#86efac"
-        strokeWidth={0.25}
-        opacity={0.95}
+        d="M 4 22 C 12 14, 22 16, 28 26 C 32 38, 26 48, 16 52 C 8 50, 2 38, 4 22 Z"
+        fill="#bae6fd"
+        stroke="#38bdf8"
+        strokeWidth={0.4}
       />
       <path
-        d="M 40 10 C 46 8, 52 12, 54 18 C 56 24, 52 30, 46 32 C 42 28, 38 22, 40 10 Z"
-        fill="#e0e7ff"
-        stroke="#a5b4fc"
-        strokeWidth={0.25}
-        opacity={0.95}
+        d="M 38 18 C 48 14, 56 18, 58 28 C 56 38, 48 42, 40 36 C 36 28, 36 22, 38 18 Z"
+        fill="#c7d2fe"
+        stroke="#818cf8"
+        strokeWidth={0.4}
       />
       <path
-        d="M 6 18 C 14 14, 24 16, 28 24 C 30 32, 26 42, 18 48 C 10 46, 4 36, 6 18 Z"
-        fill="#e0f2fe"
-        stroke="#7dd3fc"
-        strokeWidth={0.25}
-        opacity={0.95}
+        d="M 52 16 C 68 12, 88 18, 96 32 C 98 48, 88 58, 72 56 C 58 52, 50 42, 52 28 Z"
+        fill="#bbf7d0"
+        stroke="#4ade80"
+        strokeWidth={0.4}
       />
     </g>
   );
 }
 
+function habitatDotRadius(point: ProjectedPoint) {
+  const base =
+    point.role === "주요서식지"
+      ? Math.max(2.2, Math.min(5.5, Math.sqrt(point.count) / 22))
+      : 1.8;
+  return base * HABITAT_DOT_SCALE;
+}
+
 function MigrationMapSvg() {
-  const mapId = useId().replace(/:/g, "");
   const points = getProjectedHabitats();
   const routes = SPOONBILL_INFO.migrationRoutes;
   const [hovered, setHovered] = useState<ProjectedPoint | null>(null);
   const [selected, setSelected] = useState<ProjectedPoint | null>(null);
+  const [mapUrlIndex, setMapUrlIndex] = useState(0);
+  const [mapBgReady, setMapBgReady] = useState(false);
 
   const active = hovered ?? selected;
+  const mapBgUrl = WORLD_MAP_URLS[mapUrlIndex];
+  const mapBgExhausted = mapUrlIndex >= WORLD_MAP_URLS.length;
+
+  const handleMapBgError = () => {
+    setMapBgReady(false);
+    setMapUrlIndex((i) => i + 1);
+  };
 
   const handlePointSelect = (point: ProjectedPoint) => {
     setSelected((prev) => (prev?.id === point.id ? null : point));
@@ -131,54 +125,68 @@ function MigrationMapSvg() {
 
   return (
     <div>
-      <div className="relative h-[280px] w-full overflow-visible rounded-2xl bg-gradient-to-br from-sky-100 via-sky-50 to-violet-50 ring-2 ring-sky-200/80 sm:h-[340px] md:h-[400px]">
-        <p className="absolute right-2 top-2 z-10 max-w-[9rem] rounded-full bg-white/90 px-2 py-1 text-[10px] leading-snug text-text-tertiary shadow-sm backdrop-blur-sm sm:right-3 sm:top-3 sm:max-w-none">
+      <div className="relative h-[280px] w-full shrink-0 overflow-hidden rounded-2xl border-2 border-sky-300/90 bg-sky-100 shadow-inner sm:h-[340px] md:h-[400px]">
+        <p className="absolute right-2 top-2 z-20 max-w-[9rem] rounded-full bg-white/95 px-2 py-1 text-[10px] leading-snug text-text-tertiary shadow-sm backdrop-blur-sm sm:right-3 sm:top-3 sm:max-w-none">
           <span className="sm:hidden">점을 탭해 보세요 ✨</span>
           <span className="hidden sm:inline">점에 마우스를 올리면 정보가 나와요 ✨</span>
         </p>
 
+        {!mapBgReady && (
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full"
+            aria-hidden
+          >
+            <MapLandmassesFallback />
+          </svg>
+        )}
+
+        {!mapBgExhausted && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={mapBgUrl}
+            src={mapBgUrl}
+            alt="세계 지형 지도"
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover object-center"
+            loading="eager"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onLoad={() => setMapBgReady(true)}
+            onError={handleMapBgError}
+          />
+        )}
+
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
-          className="absolute inset-0 h-full w-full touch-manipulation"
+          className="relative z-10 block h-full w-full touch-manipulation"
+          role="img"
           aria-label="서식지 및 이동경로 지도"
         >
-          <rect x={0} y={0} width={100} height={100} fill="#eff6ff" rx={1} />
-
-          <MapLandmasses />
-
           <defs>
             <marker
-              id={`${mapId}-arrow-regular`}
-              markerWidth={5}
-              markerHeight={5}
-              refX={4}
-              refY={2.5}
+              id="lapwing-arrow-regular"
+              markerWidth={6}
+              markerHeight={6}
+              refX={5}
+              refY={3}
               orient="auto"
             >
-              <path d="M0,0 L5,2.5 L0,5 Z" fill="#e11d48" />
+              <path d="M0,0 L6,3 L0,6 Z" fill="#e11d48" />
             </marker>
             <marker
-              id={`${mapId}-arrow-rare`}
-              markerWidth={5}
-              markerHeight={5}
-              refX={4}
-              refY={2.5}
+              id="lapwing-arrow-rare"
+              markerWidth={6}
+              markerHeight={6}
+              refX={5}
+              refY={3}
               orient="auto"
             >
-              <path d="M0,0 L5,2.5 L0,5 Z" fill="#64748b" />
+              <path d="M0,0 L6,3 L0,6 Z" fill="#64748b" />
             </marker>
           </defs>
-
-          <text x={72} y={44} fontSize={3.2} fill="#0369a1" fontWeight={600}>
-            아시아
-          </text>
-          <text x={44} y={22} fontSize={2.8} fill="#4338ca" fontWeight={600}>
-            유럽
-          </text>
-          <text x={10} y={36} fontSize={2.8} fill="#0284c7" fontWeight={600}>
-            북미
-          </text>
 
           {routes.map((route) => {
             const { x1, y1, x2, y2 } = projectRoute(route);
@@ -191,21 +199,18 @@ function MigrationMapSvg() {
                 <path
                   d={`M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`}
                   fill="none"
-                  stroke={isRegular ? "#f43f5e" : "#94a3b8"}
-                  strokeWidth={isRegular ? 0.55 : 0.35}
-                  strokeDasharray={isRegular ? undefined : "1.2 0.8"}
-                  markerEnd={`url(#${mapId}-arrow-${isRegular ? "regular" : "rare"})`}
-                  opacity={isRegular ? 0.9 : 0.65}
+                  stroke={isRegular ? "#e11d48" : "#64748b"}
+                  strokeWidth={isRegular ? 1.1 : 0.7}
+                  strokeDasharray={isRegular ? undefined : "2 1.2"}
+                  markerEnd={`url(#lapwing-arrow-${isRegular ? "regular" : "rare"})`}
+                  opacity={isRegular ? 0.95 : 0.75}
                 />
               </g>
             );
           })}
 
           {points.map((point) => {
-            const radius =
-              point.role === "주요서식지"
-                ? Math.max(2.2, Math.min(5.5, Math.sqrt(point.count) / 22))
-                : 1.8;
+            const radius = habitatDotRadius(point);
             const hitRadius = Math.max(radius * 2.2, 4.5);
             const isActive = active?.id === point.id;
 
@@ -225,11 +230,11 @@ function MigrationMapSvg() {
                   <circle
                     cx={point.x}
                     cy={point.y}
-                    r={radius + 1.2}
+                    r={radius + 0.84}
                     fill="none"
                     stroke="#831843"
                     strokeWidth={0.35}
-                    opacity={0.5}
+                    opacity={0.6}
                     pointerEvents="none"
                   />
                 )}
@@ -238,14 +243,12 @@ function MigrationMapSvg() {
                   cy={point.y}
                   r={isActive ? radius * 1.2 : radius}
                   fill={CONTINENT_COLORS[point.continent]}
-                  opacity={point.role === "주요서식지" ? 0.95 : 0.75}
+                  opacity={point.role === "주요서식지" ? 0.95 : 0.8}
                   stroke="#fff"
-                  strokeWidth={0.45}
+                  strokeWidth={0.5}
                   pointerEvents="none"
                 />
-                <title>
-                  {point.name} · {formatPointCount(point)}
-                </title>
+                <title>{`${point.name} · ${formatPointCount(point)}`}</title>
               </g>
             );
           })}
@@ -265,7 +268,7 @@ function MigrationMapSvg() {
           </div>
         )}
 
-        <div className="pointer-events-none absolute bottom-2 left-2 right-2 flex flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:right-auto">
+        <div className="pointer-events-none absolute bottom-2 left-2 right-2 z-20 flex flex-wrap gap-1 sm:bottom-3 sm:left-3 sm:right-auto">
           {continentLabels.map((c) => (
             <span
               key={c}
@@ -312,7 +315,8 @@ export function SpoonbillMigrationCharts() {
   const routeList = SPOONBILL_INFO.migrationRoutes;
 
   return (
-    <div className="space-y-4 overflow-visible sm:space-y-5">      <div>
+    <div className="space-y-4 overflow-visible sm:space-y-5">
+      <div>
         <h4 className="mb-2 font-display text-sm font-semibold text-text sm:text-base">
           🗺️ 현재 서식지 & 이동경로 (전 세계)
         </h4>

@@ -1,3 +1,17 @@
+/** 서식지·이동경로용 세계 지형 지도 URL (정사도 투영, 우선순위 순) */
+export function getWorldMigrationMapUrls(): string[] {
+  return [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_Marble_2002.png/1920px-Blue_Marble_2002.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/1280px-The_Blue_Marble_%28remastered%29.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_Marble_2002.png/1280px-Blue_Marble_2002.png",
+    buildWorldMigrationMapOsmUrl(),
+  ];
+}
+
+export function buildWorldMigrationMapOsmUrl(width = 1200, height = 560) {
+  return `https://staticmap.openstreetmap.de/staticmap.php?center=42,85&zoom=2&size=${width}x${height}&maptype=mapnik`;
+}
+
 export function buildStaticMapImageUrl(
   latitude: number,
   longitude: number,
