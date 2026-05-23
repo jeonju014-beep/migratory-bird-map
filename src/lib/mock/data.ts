@@ -16,6 +16,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     address: "전라남도 순천시 순천만길 513-25",
     overview:
       "동아시아-대양주 철새 이동 경로의 핵심 습지. 가을·겨울 철새 300종 이상 기록.",
+    homepageUrl: "https://www.suncheon.go.kr/kor/contents.do?MENU_ID=1200100000",
     source: "mock",
   },
   {
@@ -23,6 +24,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     title: "천수만 철새도래지",
     address: "충청남도 서천군 마서면",
     overview: "갯벌과 간석지가 발달한 국제적 중요습지. 흑두루미·고니 등 관측.",
+    homepageUrl: "https://www.seocheon.go.kr/tour/contents.do?key=1234",
     source: "mock",
   },
   {
@@ -30,6 +32,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     title: "강화도 갯벌·하구",
     address: "인천광역시 강화군",
     overview: "서해안 대표 겨울철새 서식지. 멧도요·재갈매기 등 다수 도래.",
+    homepageUrl: "https://www.ganghwa.go.kr/open_content/tour/",
     source: "mock",
   },
   {
@@ -37,6 +40,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     title: "태화강 하구습지",
     address: "울산광역시 남구",
     overview: "떼까마귀·원앙·물닭 등 겨울철 대규모 군집 관측으로 유명.",
+    homepageUrl: "https://www.ulsan.go.kr/tour/",
     source: "mock",
   },
   {
@@ -44,6 +48,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     title: "경포호·주변 습지",
     address: "강원특별자치도 강릉시",
     overview: "봄·가을 철새 이동 시 물새·맹금류 관측에 적합한 호수 습지.",
+    homepageUrl: "https://www.gn.go.kr/tour/contents.do?key=5678",
     source: "mock",
   },
   {
@@ -51,6 +56,7 @@ export const MOCK_BIRD_SITES: BirdSite[] = [
     title: "낙동감 하구 생태공원",
     address: "부산광역시 사하구",
     overview: "하구 습지와 갯벌이 발달한 철새 도래지. 겨울 물새 다수 서식.",
+    homepageUrl: "https://www.busan.go.kr/ecopark/",
     source: "mock",
   },
 ];
@@ -62,6 +68,7 @@ export const MOCK_WETLAND_SPOTS: WetlandSpot[] = [
     address: "전라북도 군산시 옥도면",
     description: "금강 하구의 광활한 간석지·습지. 철새 도래의 대표 거점.",
     regionName: "전북",
+    homepageUrl: "https://www.gunsan.go.kr/tour/",
     source: "mock",
   },
   {
@@ -70,6 +77,7 @@ export const MOCK_WETLAND_SPOTS: WetlandSpot[] = [
     address: "전라남도 목포시",
     description: "영산강·섬진강 하구 일대 갯벌. 겨울철 물새 서식지.",
     regionName: "전남",
+    homepageUrl: "https://www.mokpo.go.kr/tour/",
     source: "mock",
   },
   {
@@ -78,6 +86,7 @@ export const MOCK_WETLAND_SPOTS: WetlandSpot[] = [
     address: "경기도 김포시",
     description: "한강 하구의 생태공원과 습지. 도심 근접 철새 관측지.",
     regionName: "경기",
+    homepageUrl: "https://www.hangang.go.kr/",
     source: "mock",
   },
   {
@@ -86,6 +95,7 @@ export const MOCK_WETLAND_SPOTS: WetlandSpot[] = [
     address: "전라북도 남원시",
     description: "섬진강 유역 수변 녹지. 봄·가을 이동 철새 관측.",
     regionName: "전북",
+    homepageUrl: "https://www.namwon.go.kr/tour/",
     source: "mock",
   },
 ];

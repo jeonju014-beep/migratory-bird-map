@@ -13,6 +13,10 @@ export interface BirdSite {
   mapX?: string;
   mapY?: string;
   tel?: string;
+  homepageUrl?: string;
+  mapUrl?: string;
+  summary?: string;
+  highlights?: string[];
   source: "tour" | "mock";
 }
 
@@ -22,6 +26,10 @@ export interface WetlandSpot {
   address: string;
   description: string;
   regionName: string;
+  homepageUrl?: string;
+  mapUrl?: string;
+  summary?: string;
+  highlights?: string[];
   source: "water" | "mock";
 }
 
@@ -29,6 +37,8 @@ export interface BirdSpeciesCategory {
   name: string;
   count: number;
   color: string;
+  description?: string;
+  examples?: string[];
 }
 
 export interface RegionScore {

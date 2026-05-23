@@ -15,7 +15,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { SpeciesBalloon, SpeciesLegendItem } from "@/components/charts/species-balloon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { enrichSpeciesCategory } from "@/lib/mock/species-descriptions";
 import type { BirdSpeciesCategory, RegionScore } from "@/types/dashboard";
 import type { WeatherTrendPoint } from "@/types/weather";
 
@@ -82,29 +84,60 @@ export function WeatherTrendChart({ data }: { data: WeatherTrendPoint[] }) {
 }
 
 export function SpeciesPieChart({ data }: { data: BirdSpeciesCategory[] }) {
+  const enriched = data.map(enrichSpeciesCategory);
+  const total = enriched.reduce((sum, item) => sum + item.count, 0);
+
   return (
     <ChartCard title="🐦 철새 종 분포">
-      <ResponsiveContainer width="100%" height={280}>
+      <p className="-mt-2 mb-3 text-xs text-violet-400">
+        파이 조각이나 아래 종류에 마우스를 올리면 설명 말풍선이 나타나요
+      </p>
+      <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
-            data={data}
+            data={enriched}
             dataKey="count"
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={90}
+            outerRadius={85}
             label={({ name, percent }) =>
               `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
             }
           >
-            {data.map((entry) => (
-              <Cell key={entry.name} fill={entry.color} />
+            {enriched.map((entry) => (
+              <Cell key={entry.name} fill={entry.color} stroke="#fff" strokeWidth={2} />
             ))}
           </Pie>
-          <Tooltip contentStyle={tooltipStyle} />
-          <Legend />
+          <Tooltip
+            content={({ active, payload }) => {
+              if (!active || !payload?.[0]?.payload) return null;
+              const category = payload[0].payload as BirdSpeciesCategory;
+              const percent =
+                total > 0
+                  ? Math.round((category.count / total) * 100)
+                  : 0;
+              return (
+                <SpeciesBalloon
+                  category={category}
+                  countLabel={`${category.count}종 · ${percent}%`}
+                  tail="top"
+                />
+              );
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
+
+      <ul className="mt-2 space-y-0.5 overflow-visible border-t border-pink-100 pt-3">
+        {enriched.map((category) => (
+          <SpeciesLegendItem
+            key={category.name}
+            category={category}
+            total={total}
+          />
+        ))}
+      </ul>
     </ChartCard>
   );
 }
@@ -117,11 +150,11 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="h-full">
+    <Card className="h-full overflow-visible">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent className="overflow-visible">{children}</CardContent>
     </Card>
   );
 }
